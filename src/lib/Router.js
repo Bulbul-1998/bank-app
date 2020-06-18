@@ -48,14 +48,15 @@ function Router(opts = {}) {
           callback = routes[path];
           break;
         }
-
         let navigation = path.split('/');
+        if (path !== "*" && !compare(navigation, route)) continue;
+
         for (let i = 0; i < navigation.length; ++i) {
           const nav = navigation[i];
           if (nav === '*') {
             match = true;
             break;
-          } else if (nav[0] === ':' && ((!nav.endsWith('?') && !route[i]) || nav.endsWith('?'))) {
+          } else if (nav.startsWith(':') && ((!nav.endsWith('?') && !route[i]) || nav.endsWith('?'))) {
             params[nav.slice(1, -1)] = route[i];
             match = true;
             continue;
@@ -89,6 +90,17 @@ function Router(opts = {}) {
           const $el = document.getElementById(hash.slice(1));
           if ($el) $el.scrollIntoView();
         }
+      }
+
+      function compare(path1, path2) {
+        let optional = 0;
+        path1.map(name => {
+          if (name.startsWith(':') && name.endsWith('?')) ++optional;
+        });
+
+        if (path1.length === path2.length) return true;
+        if (path1.length === path2.length - optional) return true;
+        return false;
       }
     },
     listen: function () {
