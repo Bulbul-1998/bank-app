@@ -3,6 +3,10 @@ import mustache from 'mustache';
 import css from './main.scss';
 import template from './main.hbs';
 import Router from './lib/Router';
+import home from './pages/home/home';
+import customer from './pages/customer/customer';
+import employee from './pages/employee/employee';
+import addCustomer from './pages/addCustomer/addCustomer';
 
 window.onload = main;
 
@@ -11,17 +15,24 @@ function main() {
   loadApp();
 
   router.add('/', () => {
-    root.innerHTML = `<span>Hello World!</span>`;
+    home().render();
+  });
+  router.add('/employee/add-customer', () => {
+    addCustomer().render();
+  });
+  router.add('/employee', () => {
+    employee().render();
+  });
+  router.add('/customer', () => {
+    customer().render();
   });
   router.add('*', () => {
-    // jshint ignore:start
     alert("Cannot get " + location.pathname);
-    // jshint ignore:end
   });
   router.listen();
 
   function loadApp() {
-    const AppName = 'Quickpage';
+    const AppName = 'Bank App';
     app.innerHTML = mustache.render(template, {
       "app-name": AppName
     });

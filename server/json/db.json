@@ -1,0 +1,14 @@
+{
+  "employees": [
+    {
+      "id": "emp02",
+      "name": "Ajit Kumar",
+      "email": "ajit@foxdebug.com",
+      "address": "Bilaspur, C.G",
+      "pincode": "495001",
+      "password": "mypass123"
+    }
+  ],
+  "customer": [],
+  "transactions": []
+}

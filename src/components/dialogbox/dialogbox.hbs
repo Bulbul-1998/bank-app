@@ -1,0 +1,16 @@
+<div class="box">
+  {{#title}}<span class="title">{{.}}</span>{{/title}}
+  <div class="body">
+    {{#loader}}
+    <span class="icon loader"></span>
+    {{/loader}}
+    <span class="message">{{message}}</span>
+  </div>
+  {{#buttons}}
+  <div class="buttons">
+    {{#.}}
+    <button id="{{id}}">{{text}}</button>
+    {{/.}}
+  </div>
+  {{/buttons}}
+</div>

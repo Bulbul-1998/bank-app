@@ -1,0 +1,35 @@
+<div class="body">
+  <h2>Login to Bank App</h2>
+  <hr>
+  <div class="form" role="form" aria-label="form">
+
+    <div class="group column">
+      <span class="title">What is your relation with bank?</span>
+      <div class="group">
+        <label type="radio">
+          <input type="radio" checked name="loginType" id="loginTypeEmployee">
+          <span>Employee</span>
+        </label>
+
+        <label type="radio">
+          <input type="radio" name="loginType" id="loginTypeCustomer">
+          <span>Customer</span>
+        </label>
+      </div>
+    </div>
+
+    <hr>
+
+    <label type="text">
+      <input type="text" id="email" name="new-email" placeholder="email">
+    </label>
+
+    <label type="text">
+      <input type="password" id="password" placeholder="password">
+    </label>
+
+    <button id="login">Login</button>
+    <span class="saperator">or</span>
+    <button id="signinWithGoogle" class="g-signin2" data-onsuccess="onSignIn">Google</button>
+  </div>
+</div>

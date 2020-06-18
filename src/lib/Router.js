@@ -1,12 +1,21 @@
-function Router() {
+/**
+ * 
+ * @param {object} [opts] 
+ * @param {boolean} [opts.enableCache] 
+ */
+function Router(opts = {}) {
   const routes = {};
+  const cache = {};
+
+  const enableCache = opts.enableCache;
 
   return {
+    oldPath: '',
     onnavigate: () => {},
     /**
      * Adds new route
      * @param {string} path 
-     * @param {function(Object, Object):void} callback 
+     * @param {onnavigate} callback 
      */
     add: function (path, callback) {
       routes[path] = callback;
@@ -17,6 +26,15 @@ function Router() {
      */
     navigate: function (pathname) {
       pathname = (typeof pathname === 'string' ? pathname : location.pathname);
+      const hash = location.hash;
+
+      if (this.oldPath === pathname) return;
+
+      this.oldPath = pathname;
+      if (enableCache && (pathname in cache)) {
+        return (root.innerHTML = cache[pathname]);
+      }
+
       let route = (decodeURI(pathname)).split('/');
       let query = decodeURI(location.search.substr(1));
       const params = {};
@@ -37,8 +55,8 @@ function Router() {
           if (nav === '*') {
             match = true;
             break;
-          } else if (nav[0] === ':') {
-            params[nav.substr(1)] = route[i];
+          } else if (nav[0] === ':' && ((!nav.endsWith('?') && !route[i]) || nav.endsWith('?'))) {
+            params[nav.slice(1, -1)] = route[i];
             match = true;
             continue;
           } else if (nav === route[i]) {
@@ -67,6 +85,10 @@ function Router() {
         }
 
         callback(params, queries);
+        if (hash) {
+          const $el = document.getElementById(hash.slice(1));
+          if ($el) $el.scrollIntoView();
+        }
       }
     },
     listen: function () {
@@ -83,7 +105,7 @@ function Router() {
 
         const $el = e.target;
 
-        if (!($el instanceof HTMLAnchorElement)) return;
+        if (!($el instanceof HTMLAnchorElement) || $el.hasAttribute("ignore-routing")) return;
 
         /**
          * @type {string}
@@ -94,6 +116,8 @@ function Router() {
         if (!thisSite.test(href)) return;
 
         e.preventDefault();
+
+        if (enableCache) cache[location.pathname] = root.innerHTML;
 
         if (href !== location.pathname) history.pushState(history.state, document.title, href);
         document.dispatchEvent(new CustomEvent('locationchange'));
@@ -107,18 +131,15 @@ function Router() {
 
         if (this.onnavigate) this.onnavigate(path);
       }
-    },
-
-    /**
-     * Load module using webpack lazy loading
-     * @param {string} name
-     */
-    loadModule: function (name, path) {
-      //jshint ignore:start
-      return eval(`import( /* webpackChunkName: "${name}" */ '${path}')`);
-      //jshint ignore:end
     }
   };
 }
 
 export default Router;
+
+/**
+ * This callback is called on navigation to this route
+ * @callback onnavigate
+ * @param {object} params
+ * @param {object} queries
+ */
