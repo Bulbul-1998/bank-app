@@ -4,7 +4,7 @@ import tag from 'html-tag-js';
 import template from './deposit.hbs';
 import css from './deposit.scss';
 
-function deposite() {
+function deposit() {
   const html = mustache.render(template, {});
   const $page = `<div data-id="lirpdhod" className="page">${html}</div>`;
 
@@ -24,4 +24,4 @@ function deposite() {
   };
 }
 
-export default deposite;
+export default deposit;

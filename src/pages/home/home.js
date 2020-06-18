@@ -103,26 +103,28 @@ function login(data) {
     message: "Signing in..."
   });
   root.append($loadingBox);
+  const userType = data.userType;
 
   ajax({
-      url: "/api/login",
-      method: "post",
-      contentType: "application/json",
-      data,
+      url: `/api/${userType}?email=${encodeURI(data.email)}`,
       responseType: "json",
       response: true
     })
     .then(res => {
+      sessionStorage.setItem("loginDetails", JSON.stringify({
+        userType,
+        user: res
+      }));
       const $dialogBox = dialogbox({
         title: "INFO",
-        message: res.message,
+        message: "Login successfull",
         buttons: [{
           id: "dialogboxOkButton",
           text: "OK"
         }],
         oninteract: function (e) {
           if (e.target.id === "dialogboxOkButton") {
-            location.href = "/" + data.userType;
+            location.href = "/" + userType;
             this.remove();
           }
         }
