@@ -45,7 +45,7 @@ function main() {
   router.add('/employee/close-account', () => {
     closeAccount().render();
   });
-  router.add('/employee/view-cusotmer', () => {
+  router.add('/employee/view-customer', () => {
     viewCustomer().render();
   });
 
